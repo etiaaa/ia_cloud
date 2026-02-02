@@ -1,4 +1,4 @@
-ia_cloud/
+.claude/
 __pycache__/
 *.pyc
 .env
