@@ -6,8 +6,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f0f2f5;
-    color: #1a1a2e;
+    background: #0f172a;
+    color: #e2e8f0;
     min-height: 100vh;
 }
 
@@ -23,42 +23,45 @@ header {
 }
 
 header h1 {
-    font-size: 1.8rem;
-    color: #1a1a2e;
+    font-size: 2rem;
+    color: #38bdf8;
 }
 
 .subtitle {
-    color: #555;
+    color: #94a3b8;
     margin-top: 0.3rem;
 }
 
 .input-section {
-    background: #fff;
+    background: #1e293b;
     padding: 1.5rem;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #334155;
 }
 
 .input-section label {
     display: block;
     font-weight: 600;
     margin-bottom: 0.5rem;
+    color: #cbd5e1;
 }
 
 textarea {
     width: 100%;
     padding: 0.8rem;
-    border: 2px solid #ddd;
+    border: 2px solid #334155;
     border-radius: 8px;
     font-size: 1rem;
     resize: vertical;
     font-family: inherit;
+    background: #0f172a;
+    color: #e2e8f0;
     transition: border-color 0.2s;
 }
 
 textarea:focus {
     outline: none;
-    border-color: #4a6cf7;
+    border-color: #38bdf8;
 }
 
 .buttons {
@@ -83,12 +86,12 @@ button:active {
 }
 
 #btn-analyze {
-    background: #4a6cf7;
+    background: #3b82f6;
     color: #fff;
 }
 
 #btn-analyze:hover {
-    background: #3a5ce5;
+    background: #2563eb;
 }
 
 #btn-anonymize {
@@ -101,37 +104,78 @@ button:active {
 }
 
 #btn-report {
-    background: #f59e0b;
+    background: #8b5cf6;
     color: #fff;
 }
 
 #btn-report:hover {
-    background: #d97706;
+    background: #7c3aed;
 }
 
+/* Bannière de risque */
+.risk-banner {
+    margin-top: 1.2rem;
+    padding: 1rem 1.4rem;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.risk-banner.critique {
+    background: #450a0a;
+    border: 2px solid #dc2626;
+    color: #fca5a5;
+}
+
+.risk-banner.eleve {
+    background: #451a03;
+    border: 2px solid #f59e0b;
+    color: #fde68a;
+}
+
+.risk-banner.moyen {
+    background: #1e3a5f;
+    border: 2px solid #3b82f6;
+    color: #93c5fd;
+}
+
+.risk-banner.faible {
+    background: #052e16;
+    border: 2px solid #22c55e;
+    color: #bbf7d0;
+}
+
+.risk-banner.aucun {
+    background: #052e16;
+    border: 2px solid #22c55e;
+    color: #bbf7d0;
+}
+
+/* Résultats */
 .results-section {
-    margin-top: 1.5rem;
+    margin-top: 1.2rem;
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
 }
 
 .result-card {
-    background: #fff;
+    background: #1e293b;
     padding: 1.5rem;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #334155;
 }
 
 .result-card h2 {
     font-size: 1.2rem;
     margin-bottom: 0.8rem;
-    color: #1a1a2e;
+    color: #e2e8f0;
 }
 
 .pii-count {
     font-size: 0.95rem;
-    color: #555;
+    color: #94a3b8;
     margin-bottom: 0.8rem;
 }
 
@@ -139,11 +183,12 @@ button:active {
     line-height: 1.8;
     font-size: 1rem;
     padding: 1rem;
-    background: #fafafa;
+    background: #0f172a;
     border-radius: 6px;
-    border: 1px solid #eee;
+    border: 1px solid #334155;
 }
 
+/* Tags par sévérité */
 .pii-tag {
     padding: 2px 6px;
     border-radius: 4px;
@@ -151,13 +196,10 @@ button:active {
     font-size: 0.9rem;
 }
 
-.pii-tag[data-label="NOM"] { background: #fde68a; color: #92400e; }
-.pii-tag[data-label="EMAIL"] { background: #bfdbfe; color: #1e40af; }
-.pii-tag[data-label="TELEPHONE"] { background: #c7d2fe; color: #3730a3; }
-.pii-tag[data-label="ADRESSE"] { background: #bbf7d0; color: #166534; }
-.pii-tag[data-label="ORGANISATION"] { background: #e9d5ff; color: #6b21a8; }
-.pii-tag[data-label="SECU"] { background: #fecaca; color: #991b1b; }
-.pii-tag[data-label="IBAN"] { background: #fed7aa; color: #9a3412; }
+.pii-tag[data-severity="critique"] { background: #dc2626; color: #fff; }
+.pii-tag[data-severity="élevé"]    { background: #f59e0b; color: #000; }
+.pii-tag[data-severity="moyen"]    { background: #3b82f6; color: #fff; }
+.pii-tag[data-severity="faible"]   { background: #6b7280; color: #fff; }
 
 .pii-legend {
     display: flex;
@@ -171,6 +213,7 @@ button:active {
     align-items: center;
     gap: 0.3rem;
     font-size: 0.85rem;
+    color: #94a3b8;
 }
 
 .legend-dot {
@@ -182,21 +225,102 @@ button:active {
 .anonymized-text {
     font-family: "Courier New", monospace;
     padding: 1rem;
-    background: #f3f4f6;
+    background: #0f172a;
     border-radius: 6px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #334155;
     line-height: 1.6;
     white-space: pre-wrap;
+    color: #10b981;
 }
 
 .copy-btn {
     margin-top: 0.8rem;
-    background: #6b7280;
+    background: #475569;
     color: #fff;
     font-size: 0.85rem;
     padding: 0.5rem 1rem;
 }
 
 .copy-btn:hover {
-    background: #4b5563;
+    background: #64748b;
+}
+
+/* Liste détaillée des entités */
+.entity-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #334155;
+    flex-wrap: wrap;
+}
+
+.entity-item:last-child {
+    border-bottom: none;
+}
+
+.entity-severity {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.entity-label {
+    font-weight: 600;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.entity-text {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.entity-reason {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* Upload fichier */
+.file-upload {
+    margin-top: 0.8rem;
+}
+
+.file-label {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #334155;
+    border: 2px dashed #475569;
+    border-radius: 8px;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.file-label:hover {
+    border-color: #38bdf8;
+    color: #38bdf8;
+}
+
+#file-input {
+    display: none;
+}
+
+/* Contenu pièce jointe */
+.attachment-text {
+    font-family: "Courier New", monospace;
+    padding: 1rem;
+    background: #0f172a;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    color: #94a3b8;
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.85rem;
 }

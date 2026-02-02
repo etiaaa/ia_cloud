@@ -3,39 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistant RGPD - Détection de données sensibles</title>
+    <title>SecureMail - Anti-fuite de données</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Assistant de Conformité RGPD</h1>
-            <p class="subtitle">Détection et anonymisation de données personnelles</p>
+            <h1>SecureMail</h1>
+            <p class="subtitle">Analyse intelligente de vos emails avant envoi</p>
         </header>
 
         <main>
             <section class="input-section">
-                <label for="text-input">Collez votre texte à analyser :</label>
-                <textarea id="text-input" rows="8" placeholder="Ex: Jean Dupont habite au 12 rue de la Paix, Paris. Son email est jean.dupont@email.com et son numéro est 06 12 34 56 78."></textarea>
+                <label for="text-input">Collez le contenu de votre email avant envoi :</label>
+                <textarea id="text-input" rows="10" placeholder="Collez ici le contenu de votre email pour vérifier qu'il ne contient pas de données sensibles..."></textarea>
+
+                <div class="file-upload">
+                    <label for="file-input" class="file-label">
+                        <span id="file-label-text">+ Ajouter une pièce jointe (PDF, Word, Excel)</span>
+                    </label>
+                    <input type="file" id="file-input" accept=".pdf,.docx,.xlsx,.xls,.txt" onchange="updateFileLabel()">
+                </div>
+
                 <div class="buttons">
-                    <button id="btn-analyze" onclick="analyzeText()">Analyser</button>
-                    <button id="btn-anonymize" onclick="anonymizeText()">Anonymiser</button>
-                    <button id="btn-report" onclick="downloadReport()">Exporter rapport PDF</button>
+                    <button id="btn-analyze" onclick="analyzeText()">Vérifier la sécurité</button>
+                    <button id="btn-anonymize" onclick="anonymizeText()">Masquer les données</button>
+                    <button id="btn-report" onclick="downloadReport()">Rapport PDF</button>
                 </div>
             </section>
 
+            <!-- Bannière d'alerte -->
+            <div id="risk-banner" class="risk-banner" hidden>
+                <span id="risk-icon"></span>
+                <span id="risk-text"></span>
+            </div>
+
+            <!-- Contenu extrait de la pièce jointe -->
+            <div id="attachment-card" class="result-card" hidden>
+                <h2>Contenu extrait : <span id="attachment-name"></span></h2>
+                <div id="attachment-text" class="attachment-text"></div>
+            </div>
+
             <section id="results" class="results-section" hidden>
                 <div class="result-card">
-                    <h2>Données personnelles détectées</h2>
+                    <h2>Analyse du contenu</h2>
                     <div id="pii-count" class="pii-count"></div>
                     <div id="highlighted-text" class="highlighted-text"></div>
                     <div id="pii-legend" class="pii-legend"></div>
                 </div>
 
+                <div id="entities-detail" class="result-card" hidden>
+                </div>
+
                 <div id="anonymized-card" class="result-card" hidden>
-                    <h2>Texte anonymisé</h2>
+                    <h2>Version sécurisée (données masquées)</h2>
                     <div id="anonymized-text" class="anonymized-text"></div>
-                    <button class="copy-btn" onclick="copyAnonymized()">Copier</button>
+                    <button class="copy-btn" onclick="copyAnonymized()">Copier le texte sécurisé</button>
                 </div>
             </section>
         </main>

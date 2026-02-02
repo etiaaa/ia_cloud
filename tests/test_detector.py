@@ -1,51 +1,108 @@
-import pytest
-from backend.detector import detect_pii
+from backend.detector import detect_sensitive_data
 
 
-def test_detect_email():
-    text = "Contactez-moi à jean.dupont@email.com pour plus d'infos."
-    entities = detect_pii(text)
+def test_detect_password():
+    text = "Voici les accès : mot de passe: MonSuperMdp123!"
+    entities = detect_sensitive_data(text)
     labels = [e["label"] for e in entities]
-    assert "EMAIL" in labels
+    assert "MOT_DE_PASSE" in labels
 
 
-def test_detect_phone_fr():
-    text = "Mon numéro est 06 12 34 56 78."
-    entities = detect_pii(text)
+def test_detect_password_english():
+    text = "Here are the credentials: password= Secret99"
+    entities = detect_sensitive_data(text)
     labels = [e["label"] for e in entities]
-    assert "TELEPHONE" in labels
+    assert "MOT_DE_PASSE" in labels
+
+
+def test_detect_login():
+    text = "login: admin_user"
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "IDENTIFIANT" in labels
+
+
+def test_detect_api_key():
+    text = "Utilise cette clé : api_key= sk-abc123xyz456"
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "CLE_API" in labels
+
+
+def test_detect_aws_key():
+    text = "Ma clé AWS est AKIAIOSFODNN7EXAMPLE"
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "CLE_API_AWS" in labels
+
+
+def test_detect_credit_card():
+    text = "Ma carte est 4111 1111 1111 1111"
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "CARTE_BANCAIRE" in labels
 
 
 def test_detect_iban():
-    text = "Mon IBAN est FR76 1234 5678 9012 3456 7890 123."
-    entities = detect_pii(text)
+    text = "Mon IBAN est FR76 1234 5678 9012 3456 7890 123"
+    entities = detect_sensitive_data(text)
     labels = [e["label"] for e in entities]
     assert "IBAN" in labels
 
 
-def test_detect_secu():
-    text = "Son numéro de sécurité sociale est 1 85 05 78 006 084 36."
-    entities = detect_pii(text)
+def test_detect_private_url():
+    text = "Le serveur est sur http://192.168.1.100:8080/admin"
+    entities = detect_sensitive_data(text)
     labels = [e["label"] for e in entities]
-    assert "SECU" in labels
+    assert "URL_PRIVEE" in labels
 
 
-def test_detect_name_fr():
-    text = "Jean Dupont travaille chez Airbus à Toulouse."
-    entities = detect_pii(text)
+def test_detect_connection_string():
+    text = "La base : postgres://admin:pass@db.internal:5432/prod"
+    entities = detect_sensitive_data(text)
     labels = [e["label"] for e in entities]
-    assert "NOM" in labels
+    assert "CHAINE_CONNEXION" in labels
 
 
-def test_no_pii():
-    text = "Le temps est beau aujourd'hui."
-    entities = detect_pii(text)
-    assert len(entities) == 0 or all(
-        e["label"] not in ("EMAIL", "TELEPHONE", "SECU", "IBAN") for e in entities
-    )
+def test_detect_email():
+    text = "Contactez jean.dupont@gmail.com"
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "EMAIL" in labels
 
 
-def test_multiple_pii():
-    text = "Marie Martin (marie@test.fr, 01 23 45 67 89) habite à Lyon."
-    entities = detect_pii(text)
-    assert len(entities) >= 2
+def test_detect_phone():
+    text = "Mon numéro est 06 12 34 56 78"
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "TELEPHONE" in labels
+
+
+def test_severity_is_present():
+    text = "password= test123"
+    entities = detect_sensitive_data(text)
+    assert len(entities) > 0
+    assert all("severity" in e for e in entities)
+    assert entities[0]["severity"] == "critique"
+
+
+def test_clean_text():
+    text = "Bonjour, la réunion est à 14h demain."
+    entities = detect_sensitive_data(text)
+    critical = [e for e in entities if e["severity"] == "critique"]
+    assert len(critical) == 0
+
+
+def test_multiple_sensitive_data():
+    text = """
+    Salut,
+    Voici les accès au serveur :
+    login: admin
+    mot de passe: P@ssw0rd!
+    URL: http://192.168.1.50:3000
+    """
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "MOT_DE_PASSE" in labels
+    assert "IDENTIFIANT" in labels
+    assert "URL_PRIVEE" in labels
