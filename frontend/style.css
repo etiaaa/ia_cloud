@@ -1,0 +1,202 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 1.8rem;
+    color: #1a1a2e;
+}
+
+.subtitle {
+    color: #555;
+    margin-top: 0.3rem;
+}
+
+.input-section {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.input-section label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    resize: vertical;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #4a6cf7;
+}
+
+.buttons {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 0.7rem 1.4rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+#btn-analyze {
+    background: #4a6cf7;
+    color: #fff;
+}
+
+#btn-analyze:hover {
+    background: #3a5ce5;
+}
+
+#btn-anonymize {
+    background: #10b981;
+    color: #fff;
+}
+
+#btn-anonymize:hover {
+    background: #059669;
+}
+
+#btn-report {
+    background: #f59e0b;
+    color: #fff;
+}
+
+#btn-report:hover {
+    background: #d97706;
+}
+
+.results-section {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.result-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.result-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    color: #1a1a2e;
+}
+
+.pii-count {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0.8rem;
+}
+
+.highlighted-text {
+    line-height: 1.8;
+    font-size: 1rem;
+    padding: 1rem;
+    background: #fafafa;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.pii-tag {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.pii-tag[data-label="NOM"] { background: #fde68a; color: #92400e; }
+.pii-tag[data-label="EMAIL"] { background: #bfdbfe; color: #1e40af; }
+.pii-tag[data-label="TELEPHONE"] { background: #c7d2fe; color: #3730a3; }
+.pii-tag[data-label="ADRESSE"] { background: #bbf7d0; color: #166534; }
+.pii-tag[data-label="ORGANISATION"] { background: #e9d5ff; color: #6b21a8; }
+.pii-tag[data-label="SECU"] { background: #fecaca; color: #991b1b; }
+.pii-tag[data-label="IBAN"] { background: #fed7aa; color: #9a3412; }
+
+.pii-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.anonymized-text {
+    font-family: "Courier New", monospace;
+    padding: 1rem;
+    background: #f3f4f6;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.copy-btn {
+    margin-top: 0.8rem;
+    background: #6b7280;
+    color: #fff;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+.copy-btn:hover {
+    background: #4b5563;
+}

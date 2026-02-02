@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistant RGPD - Détection de données sensibles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Assistant de Conformité RGPD</h1>
+            <p class="subtitle">Détection et anonymisation de données personnelles</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <label for="text-input">Collez votre texte à analyser :</label>
+                <textarea id="text-input" rows="8" placeholder="Ex: Jean Dupont habite au 12 rue de la Paix, Paris. Son email est jean.dupont@email.com et son numéro est 06 12 34 56 78."></textarea>
+                <div class="buttons">
+                    <button id="btn-analyze" onclick="analyzeText()">Analyser</button>
+                    <button id="btn-anonymize" onclick="anonymizeText()">Anonymiser</button>
+                    <button id="btn-report" onclick="downloadReport()">Exporter rapport PDF</button>
+                </div>
+            </section>
+
+            <section id="results" class="results-section" hidden>
+                <div class="result-card">
+                    <h2>Données personnelles détectées</h2>
+                    <div id="pii-count" class="pii-count"></div>
+                    <div id="highlighted-text" class="highlighted-text"></div>
+                    <div id="pii-legend" class="pii-legend"></div>
+                </div>
+
+                <div id="anonymized-card" class="result-card" hidden>
+                    <h2>Texte anonymisé</h2>
+                    <div id="anonymized-text" class="anonymized-text"></div>
+                    <button class="copy-btn" onclick="copyAnonymized()">Copier</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
