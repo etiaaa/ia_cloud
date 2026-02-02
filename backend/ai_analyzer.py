@@ -64,7 +64,7 @@ def _analyze_with_ollama(text: str) -> dict:
             "stream": False,
             "options": {"temperature": 0.1},
         },
-        timeout=120,
+        timeout=400,
     )
     response.raise_for_status()
     result_text = response.json()["response"]
