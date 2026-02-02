@@ -13,7 +13,8 @@ from backend.file_parser import extract_text, is_supported
 
 app = FastAPI(title="SecureMail - Anti-fuite de données")
 
-AI_ENABLED = bool(os.getenv("ANTHROPIC_API_KEY"))
+AI_BACKEND = os.getenv("AI_BACKEND", "ollama")
+AI_ENABLED = AI_BACKEND == "ollama" or bool(os.getenv("ANTHROPIC_API_KEY"))
 
 
 class TextRequest(BaseModel):
