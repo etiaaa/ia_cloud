@@ -14,6 +14,7 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Deploiement GCP](#deploiement-gcp)
+- [Monitoring](#monitoring)
 - [API Reference](#api-reference)
 - [Securite](#securite)
 - [Tests](#tests)
@@ -347,6 +348,125 @@ WantedBy=multi-user.target
 sudo systemctl daemon-reload
 sudo systemctl enable securemail
 sudo systemctl start securemail
+```
+
+---
+
+## Monitoring
+
+### Architecture du monitoring
+
+```
+┌─────────────────┐     ┌──────────────────────┐     ┌─────────────────┐
+│   VM Instance   │ ──► │   Cloud Monitoring   │ ──► │  Notifications  │
+│  (+ Ops Agent)  │     │    (Collecte)        │     │  (Email, SMS)   │
+└─────────────────┘     └──────────────────────┘     └─────────────────┘
+```
+
+### Composants
+
+| Composant | Role |
+|-----------|------|
+| **Ops Agent** | Collecte les metriques detaillees depuis la VM |
+| **Cloud Monitoring** | Stocke et analyse les metriques |
+| **Alerting Policies** | Definit les conditions de declenchement |
+| **Notification Channels** | Envoie les alertes (email, Slack, etc.) |
+
+### Installation de l'agent Ops
+
+L'agent Ops permet de collecter des metriques detaillees (CPU, RAM, disque, processus) depuis l'interieur de la VM.
+
+```bash
+# Telecharger et installer l'agent
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+sudo bash add-google-cloud-ops-agent-repo.sh --also-install
+
+# Verifier le statut
+sudo systemctl status google-cloud-ops-agent
+```
+
+### Types de metriques
+
+| Type | Source | Agent requis |
+|------|--------|--------------|
+| **CPU utilization** | Hyperviseur GCP | Non |
+| **CPU utilization (OS reported)** | Systeme d'exploitation | Oui |
+| **Memory utilization** | Systeme d'exploitation | Oui |
+| **Disk I/O** | Systeme d'exploitation | Oui |
+| **Network traffic** | Hyperviseur GCP | Non |
+
+### Configurer une alerte CPU
+
+#### 1. Creer un canal de notification
+
+```bash
+# Via la console : Monitoring > Alerting > Edit notification channels
+# Ajouter votre email
+```
+
+#### 2. Creer la politique d'alerte
+
+```bash
+# Via gcloud CLI
+gcloud alpha monitoring policies create \
+    --display-name="CPU SecureMail > 80%" \
+    --condition-display-name="VM CPU High" \
+    --condition-filter='resource.type="gce_instance" AND metric.type="agent.googleapis.com/cpu/utilization"' \
+    --condition-threshold-value=0.8 \
+    --condition-threshold-comparison=COMPARISON_GT \
+    --condition-threshold-duration=60s \
+    --notification-channels=<CHANNEL_ID>
+```
+
+Ou via la console Google Cloud :
+
+1. Aller dans **Monitoring > Alerting > Create Policy**
+2. **Add Condition** :
+   - Resource type : `VM Instance`
+   - Metric : `CPU utilization (OS reported)`
+   - Threshold : `> 80%`
+3. **Add Notification Channel** : Selectionner votre email
+4. **Name** : `CPU SecureMail > 80%`
+5. **Create Policy**
+
+### Tester l'alerte
+
+```bash
+# Se connecter a la VM
+gcloud compute ssh securemail-mig-xxxx --zone=us-central1-c
+
+# Installer stress (si pas present)
+sudo apt-get install -y stress
+
+# Lancer un test de charge CPU (3 minutes)
+stress --cpu 2 --timeout 180
+```
+
+Apres environ 1-2 minutes, vous devriez recevoir un email d'alerte.
+
+### Alertes recommandees pour SecureMail
+
+| Alerte | Condition | Severite |
+|--------|-----------|----------|
+| CPU elevee | CPU > 80% pendant 1 min | Warning |
+| Memoire elevee | RAM > 85% pendant 2 min | Warning |
+| Disque plein | Disk > 90% | Critical |
+| Service down | Health check echoue 3x | Critical |
+| Latence API | Latence > 2s pendant 5 min | Warning |
+
+### Dashboard personnalise
+
+Creer un dashboard dans Cloud Monitoring pour visualiser :
+
+- Utilisation CPU en temps reel
+- Utilisation memoire
+- Requetes par seconde sur l'API
+- Latence des endpoints
+- Nombre d'instances actives (auto-scaling)
+
+```bash
+# Exemple : voir les metriques CPU via gcloud
+gcloud monitoring metrics list --filter="metric.type=agent.googleapis.com/cpu/utilization"
 ```
 
 ---
