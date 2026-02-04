@@ -15,6 +15,29 @@ def test_detect_password_english():
     assert "MOT_DE_PASSE" in labels
 
 
+def test_detect_password_mdp_with_context():
+    """Test detection of 'mdp' abbreviation with multiple intermediate words."""
+    text = "mon mdp est le suivant: admin123$"
+    entities = detect_sensitive_data(text)
+    labels = [e["label"] for e in entities]
+    assert "MOT_DE_PASSE" in labels
+
+
+def test_detect_password_variations():
+    """Test various password patterns with intermediate words."""
+    test_cases = [
+        "mdp: secret123",
+        "mdp est: password1",
+        "mon mdp: test",
+        "le mot de passe est: abc123",
+        "voici le mdp du compte: xyz789",
+    ]
+    for text in test_cases:
+        entities = detect_sensitive_data(text)
+        labels = [e["label"] for e in entities]
+        assert "MOT_DE_PASSE" in labels, f"Failed to detect password in: {text}"
+
+
 def test_detect_login():
     text = "login: admin_user"
     entities = detect_sensitive_data(text)

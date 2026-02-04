@@ -18,13 +18,13 @@ REGEX_PATTERNS = [
     {
         "label": "MOT_DE_PASSE",
         "pattern": re.compile(
-            r"(?i)(?:mot\s*de\s*passe|password|mdp|pwd|pass)(?:\s+\w+)?\s*[:=]\s*\S+",
+            r"(?i)(?:mot\s*de\s*passe|password|mdp|pwd|pass)(?:\s+\w+)*\s*[:=]\s*\S+",
         ),
     },
     {
         "label": "IDENTIFIANT",
         "pattern": re.compile(
-            r"(?i)(?:login|identifiant|username|user|utilisateur)(?:\s+\w+)?\s*[:=]\s*\S+",
+            r"(?i)(?:login|identifiant|username|user|utilisateur)(?:\s+\w+)*\s*[:=]\s*\S+",
         ),
     },
     {
